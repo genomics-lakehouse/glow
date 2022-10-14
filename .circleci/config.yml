@@ -2,8 +2,7 @@ setup_2xl_base: &setup_2xl_base
   working_directory: ~/glow
   docker:
     - image: cimg/openjdk:8.0.322
-  resource_class: 2xlarge
-
+  resource_class: xlarge # changed from 2xlarge to xlarge due to circleCI constraint
 setup_xl_base: &setup_xl_base
   working_directory: ~/glow
   docker:
@@ -20,7 +19,7 @@ setup_m_base: &setup_m_base
   working_directory: ~/glow
   docker:
     - image: cimg/openjdk:8.0.322
-  resource_class: large
+  resource_class: large # changed large due to OOM issues
 
 install_conda: &install_conda
   run:
