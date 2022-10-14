@@ -20,7 +20,7 @@ setup_m_base: &setup_m_base
   working_directory: ~/glow
   docker:
     - image: cimg/openjdk:8.0.322
-  resource_class: medium+
+  resource_class: large
 
 install_conda: &install_conda
   run:
