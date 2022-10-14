@@ -197,7 +197,7 @@ contributing code today.
 
 .. _UK Biobank: https://www.ukbiobank.ac.uk/
 .. _Genomics England: https://www.genomicsengland.co.uk/
-.. _Genome Asia 100k: https://genomeasia100k.org/
+.. _Genome Asia 100k: https://www.genomeasia100k.org/
 .. _therapeutic targets for drug development: https://www.biorxiv.org/content/10.1101/2020.06.02.129908v1
 .. _BOLT-LMM: https://www.nature.com/articles/ng.3190
 .. _SAIGE: https://www.nature.com/articles/s41588-018-0184-y/
