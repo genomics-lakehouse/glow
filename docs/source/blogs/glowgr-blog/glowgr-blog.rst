@@ -24,8 +24,8 @@ to the open source bioinformatics community as part of Project Glow.*
 
 Large cohorts of individuals with paired clinical and genome sequence
 data enable unprecedented insight into human disease biology. Population
-studies such as the `UK Biobank`_, `Genomics England`_, or `Genome Asia
-100k`_ datasets are driving a need for innovation in methods for working
+studies such as the `UK Biobank`_, `Genomics England`_, or Genome Asia
+100k datasets are driving a need for innovation in methods for working
 with genetic data. These methods include genome wide association studies
 (GWAS), which enrich our understanding of the genetic architecture of
 the disease and are used in cutting-edge industrial applications, such
@@ -197,7 +197,7 @@ contributing code today.
 
 .. _UK Biobank: https://www.ukbiobank.ac.uk/
 .. _Genomics England: https://www.genomicsengland.co.uk/
-.. _Genome Asia 100k: https://www.genomeasia100k.org/
+.. _Genome Asia 100k: https://www.nature.com/articles/s41586-019-1793-z
 .. _therapeutic targets for drug development: https://www.biorxiv.org/content/10.1101/2020.06.02.129908v1
 .. _BOLT-LMM: https://www.nature.com/articles/ng.3190
 .. _SAIGE: https://www.nature.com/articles/s41588-018-0184-y/
