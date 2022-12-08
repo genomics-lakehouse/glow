@@ -58,7 +58,7 @@ to publish a layer, please push it to your docker repository:
 
 For example, to build and push the first foundational layer run,
 
-##### ProjetGlow minimal 
+##### ProjectGlow minimal 
 ```cd dbr/dbr10.4```
 
 ```docker build minimal/ -t projectglow/minimal:10.4```

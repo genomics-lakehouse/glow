@@ -79,16 +79,16 @@ lazy val mainScalastyle = taskKey[Unit]("mainScalastyle")
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 // testGrouping cannot be set globally using the `Test /` syntax since it's not a pure value
 lazy val commonSettings = Seq(
-  mainScalastyle := scalastyle.in(Compile).toTask("").value,
-  testScalastyle := scalastyle.in(Test).toTask("").value,
-  testGrouping in Test := groupByHash((definedTests in Test).value),
-  test in Test := ((test in Test) dependsOn mainScalastyle).value,
-  test in Test := ((test in Test) dependsOn testScalastyle).value,
-  test in Test := ((test in Test) dependsOn scalafmtCheckAll).value,
-  test in Test := ((test in Test) dependsOn (headerCheck in Compile)).value,
-  test in Test := ((test in Test) dependsOn (headerCheck in Test)).value,
-  test in assembly := {},
-  assemblyMergeStrategy in assembly := {
+  mainScalastyle := (Compile / scalastyle).toTask("").value,
+  testScalastyle := (Test / scalastyle).toTask("").value,
+  Test / testGrouping := groupByHash((Test / definedTests).value),
+  Test / test := ((Test / test) dependsOn mainScalastyle).value,
+  Test / test := ((Test / test) dependsOn testScalastyle).value,
+  Test / test := ((Test / test) dependsOn scalafmtCheckAll).value,
+  Test / test := ((Test / test) dependsOn (Compile / headerCheck)).value,
+  Test / test := ((Test / test) dependsOn (Test / headerCheck)).value,
+  assembly / test := {},
+  assembly / assemblyMergeStrategy := {
     // Assembly jar is not executable
     case p if p.toLowerCase.contains("manifest.mf") =>
       MergeStrategy.discard
@@ -196,13 +196,13 @@ lazy val core = (project in file("core"))
     publish / skip := false,
     // Adds the Git hash to the MANIFEST file. We set it here instead of relying on sbt-release to
     // do so.
-    packageOptions in (Compile, packageBin) += Package.ManifestAttributes("Git-Release-Hash" -> currentGitHash(baseDirectory.value)),
+    Compile / packageBin / packageOptions += Package.ManifestAttributes("Git-Release-Hash" -> currentGitHash(baseDirectory.value)),
     libraryDependencies ++= coreDependencies.value :+ scalaLoggingDependency.value,
     Compile / unmanagedSourceDirectories += baseDirectory.value / "src" / "main" / "shim" / majorMinorVersion(sparkVersion.value),
     Test / unmanagedSourceDirectories += baseDirectory.value / "src" / "test" / "shim" / majorMinorVersion(sparkVersion.value),
     functionsTemplate := baseDirectory.value / "functions.scala.TEMPLATE",
     generatedFunctionsOutput := (Compile / scalaSource).value / "io" / "projectglow" / "functions.scala",
-    sourceGenerators in Compile += generateFunctions
+    Compile / sourceGenerators += generateFunctions
   )
 
 /**
@@ -243,7 +243,7 @@ lazy val pythonPath = taskKey[String]("pythonPath")
 
 lazy val pythonSettings = Seq(
   libraryDependencies ++= testSparkDependencies.value,
-  sparkClasspath := (fullClasspath in Test).value.files.map(_.getCanonicalPath).mkString(":"),
+  sparkClasspath := (Test / fullClasspath).value.files.map(_.getCanonicalPath).mkString(":"),
   sparkHome := (ThisBuild / baseDirectory).value.absolutePath,
   pythonPath := ((ThisBuild / baseDirectory).value / "python").absolutePath,
   publish / skip := true,
@@ -306,20 +306,20 @@ lazy val python =
     .settings(
       pythonSettings,
       functionGenerationSettings,
-      test in Test := {
+      Test / test := {
         yapf.toTask(" --diff").value
         pytest.toTask(s" --doctest-modules $ignoreHailTestPathsOption python").value
       },
       generatedFunctionsOutput := baseDirectory.value / "glow" / "functions.py",
       functionsTemplate := baseDirectory.value / "glow" / "functions.py.TEMPLATE",
-      sourceGenerators in Compile += generateFunctions
+      Compile / sourceGenerators += generateFunctions
     )
     .dependsOn(core % "test->test")
 
 lazy val hail = (project in file("python/glow/hail"))
   .settings(
     pythonSettings,
-    test in Test := {
+    Test / test := {
       hailtest.toTask(s" --doctest-modules ${hailTestPaths.mkString(" ")}").value
     }
   )
@@ -328,7 +328,7 @@ lazy val hail = (project in file("python/glow/hail"))
 lazy val docs = (project in file("docs"))
   .settings(
     pythonSettings,
-    test in Test := {
+    Test / test := {
       pytest.toTask(s" $ignoreHailTestPathsOption docs").value
     }
   )
@@ -374,9 +374,9 @@ ThisBuild / stableVersion := IO
 lazy val stagedRelease = (project in file("core/src/test"))
   .settings(
     commonSettings,
-    resourceDirectory in Test := baseDirectory.value / "resources",
-    scalaSource in Test := baseDirectory.value / "scala",
-    unmanagedSourceDirectories in Test += baseDirectory.value / "shim" / majorMinorVersion(
+    Test / resourceDirectory := baseDirectory.value / "resources",
+    Test / scalaSource := baseDirectory.value / "scala",
+    Test / unmanagedSourceDirectories += baseDirectory.value / "shim" / majorMinorVersion(
       sparkVersion.value),
     libraryDependencies ++= testSparkDependencies.value ++ testCoreDependencies.value :+ "io.projectglow" %% s"glow-spark${majorVersion(sparkVersion.value)}" % stableVersion.value % "test",
     resolvers := Seq(MavenCache("local-sonatype-staging", sonatypeBundleDirectory.value)),
