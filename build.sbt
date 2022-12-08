@@ -7,7 +7,7 @@ import sbt.Keys._
 import sbt.librarymanagement.ModuleID
 import sbt.nio.Keys._
 
-lazy val scala212 = "2.12.8"
+lazy val scala212 = "2.12.16" // for use with JDK 19
 lazy val scala211 = "2.11.12"
 
 lazy val spark3 = "3.2.1"
